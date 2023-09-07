@@ -5,7 +5,8 @@
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
-    "dev": "nodemon app.js"
+    "dev": "nodemon app.js",
+    "seed": "npx sequelize db:seed --seed 20230907025008-initial-data.js"
   },
   "keywords": [],
   "author": "",
