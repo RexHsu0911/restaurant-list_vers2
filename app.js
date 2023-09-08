@@ -1,25 +1,48 @@
 const express = require('express')
 const app = express()
-const  { engine } = require('express-handlebars')
+const { engine } = require('express-handlebars')
 const port = 3000
 
 const db = require('./models')
 const Restaurant = db.Restaurant
+const { Op } = require("sequelize");
 
-app.engine('.hbs', engine({ extname: '.hbs'}))
+app.engine('.hbs', engine({ extname: '.hbs' }))
 app.set('view engine', '.hbs')
 app.set('views', './views')
 app.use(express.static('public'))
 
 app.get('/', (req, res) => {
-  res.render('index')
+  res.redirect('/restaurants')
 })
 
 // 顯示 restaurant 清單頁
 app.get('/restaurants', (req, res) => {
-  return Restaurant.findAll()
-    .then((restaurants) => res.send({ restaurants }))
+  return Restaurant.findAll({
+    raw: true
+  })
+    .then((restaurants) => res.render('index', { restaurants }))
     .catch((err) => res.status(422).json(err))
+})
+
+// 搜尋 restaurant
+app.get('/search', (req, res) => {
+  const keywords = req.query.keyword?.trim()
+  console.log('keywords:', keywords)
+  if (!keywords) {
+    return res.redirect('/restaurants')
+  }
+
+  Restaurant.findAll({
+    raw: true
+  })
+    .then((restaurants) => {
+      const filterRestaurant = restaurants.filter(restaurant => {
+        return restaurant.name.toLowerCase().includes(keywords.toLowerCase()) || restaurant.name_en.toLowerCase().includes(keywords.toLowerCase()) || restaurant.category.toLowerCase().includes(keywords.toLowerCase()) || restaurant.location.toLowerCase().includes(keywords.toLowerCase())
+      })
+      console.log(filterRestaurant)
+      res.render('index', { restaurants: filterRestaurant, keywords })
+    })
 })
 
 // 新增 restaurant 頁
@@ -28,13 +51,18 @@ app.get('/restaurants/new', (req, res) => {
 })
 
 // 新增 restaurant
-app.post('/restaurants/', (req, res) => {
+app.post('/restaurants', (req, res) => {
   res.send('add restaurant')
 })
 
 // 顯示 restaurant 項目頁
 app.get('/restaurants/:id', (req, res) => {
-  res.send(`get restaurant, id: ${req.params.id}`)
+  const id = req.params.id
+  return Restaurant.findByPk(id, {
+    raw: true
+  })
+    .then((restaurant) => res.render('detail', { restaurant }))
+    .catch((err) => console.log(err))
 })
 
 // 更新 restaurant 頁

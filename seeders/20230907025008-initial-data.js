@@ -1,5 +1,6 @@
 'use strict';
 
+// 載入 restaurant.json
 const restaurantList = require('../public/jsons/restaurant.json').results
 
 /** @type {import('sequelize-cli').Migration} */
