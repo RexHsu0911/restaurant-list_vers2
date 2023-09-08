@@ -73,9 +73,16 @@ header {
   position: relative;
   top: -100px;
   color: white;
-  text-align: center;
+  align-items: center;
   font-size: 3rem;
   text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.btn .btn {
+  width: 35%;
+  flex-wrap: wrap;
+  padding: auto;
+  font-size: 0.1rem;
 }
 
 @media screen and (max-width: 992px) {

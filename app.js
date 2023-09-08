@@ -1,16 +1,19 @@
 const express = require('express')
 const app = express()
 const { engine } = require('express-handlebars')
+const bodyParser = require('body-parser')
 const port = 3000
 
 const db = require('./models')
 const Restaurant = db.Restaurant
-const { Op } = require("sequelize");
+const { Op } = require("sequelize")
 
 app.engine('.hbs', engine({ extname: '.hbs' }))
 app.set('view engine', '.hbs')
 app.set('views', './views')
 app.use(express.static('public'))
+// 使用 body-parser 中間件來解析 URL 編碼的表單資料
+app.use(bodyParser.urlencoded({ extended: true }))
 
 app.get('/', (req, res) => {
   res.redirect('/restaurants')
@@ -47,12 +50,21 @@ app.get('/search', (req, res) => {
 
 // 新增 restaurant 頁
 app.get('/restaurants/new', (req, res) => {
-  res.send('get restaurant form')
+  return res.render('new')
 })
 
 // 新增 restaurant
 app.post('/restaurants', (req, res) => {
-  res.send('add restaurant')
+  // 從 req.body 中獲取表單資料
+  const formData = req.body
+  console.log(formData)
+  // return Restaurant.create({ formData
+  // })
+  //   .then(() => {
+  //     req.flash("success", "新增成功");
+  //     res.redirect('/restaurants')
+  //   })
+  //   .catch((err) => console.log(err))
 })
 
 // 顯示 restaurant 項目頁
