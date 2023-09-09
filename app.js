@@ -6,7 +6,6 @@ const port = 3000
 
 const db = require('./models')
 const Restaurant = db.Restaurant
-const { Op } = require("sequelize")
 
 app.engine('.hbs', engine({ extname: '.hbs' }))
 app.set('view engine', '.hbs')
@@ -14,6 +13,7 @@ app.set('views', './views')
 app.use(express.static('public'))
 // 使用 body-parser 中間件來解析 URL 編碼的表單資料
 app.use(bodyParser.urlencoded({ extended: true }))
+app.use(bodyParser.json())
 
 app.get('/', (req, res) => {
   res.redirect('/restaurants')
@@ -58,18 +58,20 @@ app.post('/restaurants', (req, res) => {
   // 從 req.body 中獲取表單資料
   const formData = req.body
   console.log(formData)
-  // return Restaurant.create({ formData
-  // })
-  //   .then(() => {
-  //     req.flash("success", "新增成功");
-  //     res.redirect('/restaurants')
-  //   })
-  //   .catch((err) => console.log(err))
+  return Restaurant.create(formData, {
+    raw: true
+  })
+    .then(() => {
+      req.flash("success", "新增成功");
+      res.redirect('/restaurants')
+    })
+    .catch((err) => console.log(err))
 })
 
 // 顯示 restaurant 項目頁
 app.get('/restaurants/:id', (req, res) => {
   const id = req.params.id
+  console.log('id:', req.params)
   return Restaurant.findByPk(id, {
     raw: true
   })

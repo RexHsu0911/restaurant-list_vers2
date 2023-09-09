@@ -42,7 +42,8 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.TEXT
     },
     rating: {
-      type: DataTypes.DECIMAL(2, 1) // DECIMAL(M,D) => 總共 M 個數字和 D 個小數位數
+      type: DataTypes.DECIMAL(2, 1),
+      defaultValue: 0
     },
     description: {
       type: DataTypes.TEXT
