@@ -1,5 +1,13 @@
 # restaurant-list_vers2
 
+##功能
+- 搜尋餐廳
+- 新增餐廳
+- 修改餐廳資訊
+- 查看餐廳詳細資訊
+- 刪除餐廳
+
+
 ## 開始使用
 
 1. 請先確認有安裝 node.js 與 npm
@@ -36,3 +44,4 @@
 - Mysql2
 - Sequelize
 - Sequelize-cli
+- method-override
