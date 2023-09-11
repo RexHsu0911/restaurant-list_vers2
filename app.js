@@ -12,7 +12,8 @@ app.set('view engine', '.hbs')
 app.set('views', './views')
 app.use(express.static('public'))
 // 使用 body-parser 中間件來解析 URL 編碼的表單資料
-app.use(bodyParser.urlencoded({ extended: true }))
+app.use(bodyParser.urlencoded({ extended: false }))
+// 支援 json
 app.use(bodyParser.json())
 
 app.get('/', (req, res) => {
@@ -57,12 +58,9 @@ app.get('/restaurants/new', (req, res) => {
 app.post('/restaurants', (req, res) => {
   // 從 req.body 中獲取表單資料
   const formData = req.body
-  console.log(formData)
-  return Restaurant.create(formData, {
-    raw: true
-  })
+  // res.json(req.body)
+  return Restaurant.create(formData)
     .then(() => {
-      req.flash("success", "新增成功");
       res.redirect('/restaurants')
     })
     .catch((err) => console.log(err))

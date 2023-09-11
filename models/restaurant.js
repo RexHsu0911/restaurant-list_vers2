@@ -21,6 +21,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER
     },
     name: {
+      allowNull: false,
       type: DataTypes.STRING
     },
     name_en: {
@@ -42,8 +43,9 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.TEXT
     },
     rating: {
-      type: DataTypes.DECIMAL(2, 1),
-      defaultValue: 0
+      allowNull: false,
+      defaultValue: 0,
+      type: DataTypes.FLOAT.UNSIGNED
     },
     description: {
       type: DataTypes.TEXT

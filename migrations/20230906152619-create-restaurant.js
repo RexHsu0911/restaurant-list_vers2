@@ -32,8 +32,9 @@ module.exports = {
         type: Sequelize.TEXT
       },
       rating: {
-        type: Sequelize.DECIMAL(2, 1),
-        defaultValue: 0
+        allowNull: false,
+        defaultValue: 0,
+        type: Sequelize.FLOAT.UNSIGNED
       },
       description: {
         type: Sequelize.TEXT
