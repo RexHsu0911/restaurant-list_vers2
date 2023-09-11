@@ -18,10 +18,12 @@
 
 <!-- restaurant list -->
 <div class="container mt-5">
+
   <div class="row">
     <div class="d-grid gap-2 text-center px-4">
       <a class="btn btn-warning mx-5 mb-5" href="/restaurants/new" role="button">Create</a>
     </div>
+
     </div>
     <div class="col-sm-10 col-12 mx-auto">
       <div class="row row-cols-md-3">
@@ -36,20 +38,19 @@
                 <div class="restaurant-category mb-1">
                   <i class="fas fa-utensils pr-2"></i>{{this.category}}
                 </div>
-
+                
                 <span class="badge rounded-pill bg-danger font-weight-normal">
                   {{this.rating}}
                   <i class="fas fa-star fa-xs"></i>
                 </span>
+              </div>
 
-              </div>
               <div class="card-footer text-center px-0">
-                <div class="btn btn-group-sm px-0">
-                  <a class="btn btn-outline-primary m-1" href="/restaurants" role="button">Edit</a>
+                  <a class="btn btn-outline-primary m-1" href="/restaurants/{{this.id}}/edit" role="button">Edit</a>
                   <a class="btn btn-outline-success m-1" href="/restaurants/{{this.id}}" role="button">Detail</a>
-                  <a class="btn btn-outline-danger m-1" href="/restaurants" role="button">Delete</a>
-                </div>
+                  <a class="btn btn-outline-danger m-1" href="/restaurants/{{this.id}}" role="button">Delete</a>
               </div>
+
             </div>
           </a>
         </div>

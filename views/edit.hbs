@@ -1,26 +1,25 @@
 <!-- restaurant create -->
 <h1 class="mb-1 restaurant-show-title text-center">Create restaurant</h1>
 <div class="container">
-  <form action="/restaurants" method="POST">
+  <form action="/restaurants/{{restaurant.id}}?_method=PUT" method="POST">
     <div class="row justify-content-center">
       <div class="card m-3" style="width: 100rem;">
         <div class="card-body">
           <div class="mb-3 row">
             <label class="col-sm-5 col-form-label">Name :</label>
             <div class="col-sm-12">
-              <input type="text" class="form-control" name="name" required>
+              <input type="text" class="form-control" name="name" value="{{restaurant.name}}" required>
             </div>
           </div>
           <div class="mb-3 row">
             <label class="col-sm-5 col-form-label">English Name :</label>
             <div class="col-sm-12">
-              <input type="text" class="form-control" name="name_en">
+              <input type="text" class="form-control" name="name_en" value="{{restaurant.name_en}}">
             </div>
           </div>
           <div class="mb-3 row">
             <label class="col-sm-5 col-form-label">Category :</label>
             <div class="col-sm-12">
-              {{!-- <input type="text" class="form-control" name="category" required> --}}
               <select class="form-select" name="category" required>
                 <option selected value="" disabled hidden>--Choose one category--</option>
                 <option value="中東料理">中東料理</option>
@@ -35,37 +34,41 @@
           <div class="mb-3 row">
             <label class="col-sm-5 col-form-label">Image Url :</label>
             <div class="col-sm-12">
-              <input type="url" class="form-control" placeholder="https://example.com" name="image">
+              <input type="url" class="form-control" placeholder="https://example.com" name="image"
+                value="{{restaurant.image}}">
             </div>
           </div>
           <div class="mb-3 row">
             <label class="col-sm-5 col-form-label">Location :</label>
             <div class="col-sm-12">
-              <input type="text" class="form-control" name="location" required>
+              <input type="text" class="form-control" name="location" value="{{restaurant.location}}" required>
             </div>
           </div>
           <div class="mb-3 row">
             <label class="col-sm-5 col-form-label">Phone :</label>
             <div class="col-sm-12">
-              <input type="tel" class="form-control" pattern="[0-9]{2} [0-9]{4} [0-9]{4}" placeholder="02 1234 5678" name="phone" required>
+              <input type="tel" class="form-control" pattern="[0-9]{2} [0-9]{4} [0-9]{4}" placeholder="02 1234 5678"
+                name="phone" value="{{restaurant.phone}}" required>
             </div>
           </div>
           <div class="mb-3 row">
             <label class="col-sm-5 col-form-label">Google Map Url :</label>
-            <div class="col-sm-12" required>
-              <input type="url" class="form-control" placeholder="https://goo.gl/maps/example" name="google_map">
+            <div class="col-sm-12">
+              <input type="url" class="form-control" placeholder="https://goo.gl/maps/example" name="google_map"
+                value="{{restaurant.google_map}}" required>
             </div>
           </div>
           <div class="mb-3 row">
             <label class="col-sm-5 col-form-label">Rating :</label>
             <div class="col-sm-12">
-              <input type="number" min="0" max="5" step="0.1" class="form-control" placeholder="0~5" name="rating" required>
+              <input type="number" min="0" max="5" step="0.1" class="form-control" placeholder="0~5" name="rating"
+                value="{{restaurant.rating}}" required>
             </div>
           </div>
           <div class="mb-3 row">
             <label class="col-sm-5 col-form-label">Description :</label>
             <div class="col-sm-12">
-              <input type="text" class="form-control" name="description">
+              <input type="text" class="form-control" name="description" value="{{restaurant.description}}">
             </div>
           </div>
 

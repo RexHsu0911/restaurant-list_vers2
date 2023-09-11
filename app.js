@@ -2,6 +2,7 @@ const express = require('express')
 const app = express()
 const { engine } = require('express-handlebars')
 const bodyParser = require('body-parser')
+const methodOverride = require('method-override')
 const port = 3000
 
 const db = require('./models')
@@ -15,6 +16,7 @@ app.use(express.static('public'))
 app.use(bodyParser.urlencoded({ extended: false }))
 // 支援 json
 app.use(bodyParser.json())
+app.use(methodOverride('_method'))
 
 app.get('/', (req, res) => {
   res.redirect('/restaurants')
@@ -69,7 +71,7 @@ app.post('/restaurants', (req, res) => {
 // 顯示 restaurant 項目頁
 app.get('/restaurants/:id', (req, res) => {
   const id = req.params.id
-  console.log('id:', req.params)
+  // console.log('id:', req.params)
   return Restaurant.findByPk(id, {
     raw: true
   })
@@ -79,13 +81,22 @@ app.get('/restaurants/:id', (req, res) => {
 
 // 更新 restaurant 頁
 app.get('/restaurants/:id/edit', (req, res) => {
-  res.send(`get restaurant edit form, id: ${req.params.id}`)
+  const id =req.params.id
+  return Restaurant.findByPk(id, {
+    raw: true
+  })
+    .then((restaurant) => res.render('edit', { restaurant }))
+    .catch((err) => console.log(err))
 })
 
 // 更新 restaurant
 app.put('/restaurants/:id', (req, res) => {
-  res.send(`restaurant id: ${req.params.id} has been modified`)
-})
+  const formData = req.body
+  const id = req.params.id
+  return Restaurant.update(formData, { where: { id } })
+    .then(() => res.redirect(`/restaurants/${id}`))
+    .catch((err) => console.log(err))
+  })
 
 // 刪除 restaurant 
 app.delete('/restaurants/:id', (req, res) => {
