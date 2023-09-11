@@ -34,7 +34,7 @@ app.get('/restaurants', (req, res) => {
 // 搜尋 restaurant
 app.get('/search', (req, res) => {
   const keywords = req.query.keyword?.trim()
-  console.log('keywords:', keywords)
+  // console.log('keywords:', keywords)
   if (!keywords) {
     return res.redirect('/restaurants')
   }
@@ -46,7 +46,7 @@ app.get('/search', (req, res) => {
       const filterRestaurant = restaurants.filter(restaurant => {
         return restaurant.name.toLowerCase().includes(keywords.toLowerCase()) || restaurant.name_en.toLowerCase().includes(keywords.toLowerCase()) || restaurant.category.toLowerCase().includes(keywords.toLowerCase()) || restaurant.location.toLowerCase().includes(keywords.toLowerCase())
       })
-      console.log(filterRestaurant)
+      // console.log(filterRestaurant)
       res.render('index', { restaurants: filterRestaurant, keywords })
     })
 })
@@ -100,7 +100,10 @@ app.put('/restaurants/:id', (req, res) => {
 
 // 刪除 restaurant 
 app.delete('/restaurants/:id', (req, res) => {
-  res.send(`restaurant id: ${req.params.id} has been deleted`)
+  const id = req.params.id
+  return Restaurant.destroy({ where: { id } })
+    .then(() => res.redirect('/restaurants'))
+    .catch((err) => console.log(err))
 })
 
 app.listen(port, () => {

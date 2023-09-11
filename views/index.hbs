@@ -24,37 +24,39 @@
       <a class="btn btn-warning mx-5 mb-5" href="/restaurants/new" role="button">Create</a>
     </div>
 
-    </div>
-    <div class="col-sm-10 col-12 mx-auto">
-      <div class="row row-cols-md-3">
-        {{#each restaurants}}
-        <div class="col">
-          <a href="/restaurants/{{this.id}}" class="text-secondary">
-            <div class="card mb-3">
-              <img class="card-img-top" src="{{this.image}}" alt="{{this.name}}">
-              <div class="card-body p-3">
-                <h6 class="card-title mb-1">{{this.name}}</h6>
+  </div>
+  <div class="col-sm-10 col-12 mx-auto">
+    <div class="row row-cols-md-3">
+      {{#each restaurants}}
+      <div class="col">
+        <a href="/restaurants/{{this.id}}" class="text-secondary">
+          <div class="card mb-3">
+            <img class="card-img-top" src="{{this.image}}" alt="{{this.name}}">
+            <div class="card-body p-3">
+              <h6 class="card-title mb-1">{{this.name}}</h6>
 
-                <div class="restaurant-category mb-1">
-                  <i class="fas fa-utensils pr-2"></i>{{this.category}}
-                </div>
-                
-                <span class="badge rounded-pill bg-danger font-weight-normal">
-                  {{this.rating}}
-                  <i class="fas fa-star fa-xs"></i>
-                </span>
+              <div class="restaurant-category mb-1">
+                <i class="fas fa-utensils pr-2"></i>{{this.category}}
               </div>
 
-              <div class="card-footer text-center px-0">
-                  <a class="btn btn-outline-primary m-1" href="/restaurants/{{this.id}}/edit" role="button">Edit</a>
-                  <a class="btn btn-outline-success m-1" href="/restaurants/{{this.id}}" role="button">Detail</a>
-                  <a class="btn btn-outline-danger m-1" href="/restaurants/{{this.id}}" role="button">Delete</a>
-              </div>
-
+              <span class="badge rounded-pill bg-danger font-weight-normal">
+                {{this.rating}}
+                <i class="fas fa-star fa-xs"></i>
+              </span>
             </div>
-          </a>
-        </div>
-        {{/each}}
+
+            <div class="card-footer text-center px-0">
+              <a class="btn btn-outline-primary m-1" href="/restaurants/{{this.id}}/edit" role="button">Edit</a>
+              <a class="btn btn-outline-success m-1" href="/restaurants/{{this.id}}" role="button">Detail</a>
+              <form action="/restaurants/{{this.id}}?_method=DELETE" method="POST">
+                <button type="submit" class="btn btn-outline-danger m-1">Delete</button>
+              </form>
+            </div>
+
+          </div>
+        </a>
       </div>
+      {{/each}}
     </div>
+  </div>
 </div>
