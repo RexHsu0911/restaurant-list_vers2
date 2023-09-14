@@ -64,5 +64,25 @@
       </div>
       {{/each}}
     </div>
+
+
+    <ul class="pagination justify-content-center">
+      <li class="page-item">
+        <form action="/restaurants" method="GET" style="display: inline;">
+          <input type="hidden" name="page" value="{{prev}}">
+          <button class="page-link" type="submit">&laquo;</button>
+        </form>
+      </li>
+      <li class="page-item">
+        <span class="page-link">{{page}}</span>
+      </li>
+      <li class="page-item">
+        <form action="/restaurants" method="GET" style="display: inline;">
+          <input type="hidden" name="page" value="{{next}}">
+          <button class="page-link" type="submit">&raquo;</button>
+        </form>
+      </li>
+    </ul>
+
   </div>
 </div>

@@ -6,10 +6,20 @@ const Restaurant = db.Restaurant
 
 // 顯示 restaurant 清單頁
 router.get('/restaurants', (req, res, next) => {
+  const page = parseInt(req.query.page) || 1
+  const limit = 9
+
   return Restaurant.findAll({
     raw: true
   })
-    .then((restaurants) => res.render('index', { restaurants }))
+    .then((restaurants) => {
+      res.render('index', {
+        restaurants: restaurants.slice((page - 1) * limit, page * limit),
+        prev: page > 1 ? page - 1 : page,
+        next: page + 1,
+        page
+      })
+    })
     .catch((error) => {
       error.errorMessage = '資料取得失敗:('
       next(error)
