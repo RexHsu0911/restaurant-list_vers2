@@ -1,11 +1,11 @@
-'use strict';
+'use strict'
 
 // 載入 restaurant.json
 const restaurantList = require('../public/jsons/restaurant.json').results
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  async up(queryInterface, Sequelize) {
+  async up (queryInterface, Sequelize) {
     await queryInterface.bulkInsert('Restaurants',
       restaurantList.map((restaurant) => ({
         id: restaurant.id,
@@ -25,10 +25,10 @@ module.exports = {
     )
   },
 
-  async down(queryInterface, Sequelize) {
+  async down (queryInterface, Sequelize) {
     await queryInterface.bulkDelete('Restaurants', null)
   }
-};
+}
 
 // 執行(up) seeder migration : $ npx sequelize db:seed:all
 // 復原(down) seeder migration : $ npx sequelize db:seed:undo

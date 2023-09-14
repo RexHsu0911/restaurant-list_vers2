@@ -4,10 +4,8 @@ const router = express.Router()
 const db = require('../models')
 const Restaurant = db.Restaurant
 
-
-
 // 顯示 restaurant 清單頁
-router.get('/restaurants', (req, res) => {
+router.get('/restaurants', (req, res, next) => {
   return Restaurant.findAll({
     raw: true
   })
@@ -19,7 +17,7 @@ router.get('/restaurants', (req, res) => {
 })
 
 // 搜尋 restaurant
-router.get('/search', (req, res) => {
+router.get('/search', (req, res, next) => {
   const keywords = req.query.keyword?.trim()
   // console.log('keywords:', keywords)
   if (!keywords) {
@@ -43,12 +41,12 @@ router.get('/search', (req, res) => {
 })
 
 // 新增 restaurant 頁
-router.get('/restaurants/new', (req, res) => {
+router.get('/restaurants/new', (req, res, next) => {
   return res.render('new')
 })
 
 // 新增 restaurant
-router.post('/restaurants', (req, res) => {
+router.post('/restaurants', (req, res, next) => {
   // 從 req.body 中獲取表單資料
   const formData = req.body
   // res.json(req.body)
@@ -64,7 +62,7 @@ router.post('/restaurants', (req, res) => {
 })
 
 // 顯示 restaurant 項目頁
-router.get('/restaurants/:id', (req, res) => {
+router.get('/restaurants/:id', (req, res, next) => {
   const id = req.params.id
   // console.log('id:', req.params)
   return Restaurant.findByPk(id, {
@@ -78,7 +76,7 @@ router.get('/restaurants/:id', (req, res) => {
 })
 
 // 更新 restaurant 頁
-router.get('/restaurants/:id/edit', (req, res) => {
+router.get('/restaurants/:id/edit', (req, res, next) => {
   const id = req.params.id
   return Restaurant.findByPk(id, {
     raw: true
@@ -91,7 +89,7 @@ router.get('/restaurants/:id/edit', (req, res) => {
 })
 
 // 更新 restaurant
-router.put('/restaurants/:id', (req, res) => {
+router.put('/restaurants/:id', (req, res, next) => {
   const formData = req.body
   const id = req.params.id
   return Restaurant.update(formData, { where: { id } })
@@ -105,8 +103,8 @@ router.put('/restaurants/:id', (req, res) => {
     })
 })
 
-// 刪除 restaurant 
-router.delete('/restaurants/:id', (req, res) => {
+// 刪除 restaurant
+router.delete('/restaurants/:id', (req, res, next) => {
   const id = req.params.id
   return Restaurant.destroy({ where: { id } })
     .then(() => {

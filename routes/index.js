@@ -6,8 +6,6 @@ const restaurants = require('./restaurants')
 // 以 /restaurants 開頭的話，則分流到 restaurants.js
 router.use('/', restaurants)
 
-
-
 router.get('/', (req, res) => {
   res.redirect('/restaurants')
 })

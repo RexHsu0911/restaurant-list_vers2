@@ -1,7 +1,7 @@
-'use strict';
+'use strict'
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  async up(queryInterface, Sequelize) {
+  async up (queryInterface, Sequelize) {
     await queryInterface.createTable('Restaurants', {
       id: {
         allowNull: false,
@@ -45,12 +45,12 @@ module.exports = {
       updatedAt: {
         type: Sequelize.DATE
       }
-    });
+    })
   },
-  async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Restaurants');
+  async down (queryInterface, Sequelize) {
+    await queryInterface.dropTable('Restaurants')
   }
-};
+}
 
 // 執行(up) migration : $ npx sequelize db:migrate
 // 復原(down) migration : $ npx sequelize db:seed:undo

@@ -17,9 +17,6 @@ if (process.env.NODE_ENV === 'development') {
 const router = require('./routes')
 const port = 3000
 
-const db = require('./models')
-const Restaurant = db.Restaurant
-
 app.engine('.hbs', engine({ extname: '.hbs' }))
 app.set('view engine', '.hbs')
 app.set('views', './views')
@@ -29,7 +26,6 @@ app.use(bodyParser.urlencoded({ extended: true }))
 // 支援 json
 app.use(bodyParser.json())
 app.use(methodOverride('_method'))
-
 
 app.use(session({
   secret: process.env.SESSION_SECRET,
@@ -41,8 +37,6 @@ app.use(flash())
 app.use(messageHandler)
 app.use(router)
 app.use(errorHandler)
-
-
 
 app.listen(port, () => {
   console.log(`app is running on http://localhost:${port}`)
