@@ -4,28 +4,34 @@
     <div class="search-bar-inner">
       <form action="/search">
         <h4 class="mb-2">尋找餐廳：</h4>
-        <div class="input-group">
-          <input type="text" name="keyword" class="form-control" placeholder="輸入餐廳、分類" aria-label="Restaurant Name..."
-            value="{{keywords}}" aria-describedby="search-button">
-          <div class="input-group-append">
-            <button class="btn btn-major" type="submit" id="search-button"><i class="fas fa-search"></i></button>
+        <div class="row g-5">
+          <div class="input-group col">
+            <input type="text" name="keyword" class="form-control" placeholder="輸入餐廳、分類" aria-label="Restaurant Name..."
+              value="{{keywords}}" aria-describedby="search-button">
+            <div class="input-group-append">
+              <button class="btn btn-major" type="submit" id="search-button"><i class="fas fa-search"></i></button>
+            </div>
+          </div>
+
+          <div class="input-group col">
+            <select class="form-select" name="sort" id="sort">
+              <option selected value="">Sort</option>
+              <option value="A">A->Z</option>
+              <option value="Z">Z->A</option>
+              <option value="類別">類別</option>
+              <option value="地區">地區</option>
+            </select>
           </div>
         </div>
-      </form>
     </div>
+    </form>
   </div>
 </div>
 
 <!-- restaurant list -->
 <div class="container mt-5">
-
-  <div class="row">
-    <div class="d-grid gap-2 text-center px-4">
-      <a class="btn btn-warning mx-5 mb-5" href="/restaurants/new" role="button">Create</a>
-    </div>
-
-  </div>
-  <div class="col-sm-10 col-12 mx-auto">
+  {{> message}}
+  <div class="col-sm-11 mx-auto">
     <div class="row row-cols-md-3">
       {{#each restaurants}}
       <div class="col">
@@ -45,11 +51,11 @@
               </span>
             </div>
 
-            <div class="card-footer text-center px-0">
-              <a class="btn btn-outline-primary m-1" href="/restaurants/{{this.id}}/edit" role="button">Edit</a>
-              <a class="btn btn-outline-success m-1" href="/restaurants/{{this.id}}" role="button">Detail</a>
+            <div class="card-footer p-1">
+              <a class="btn btn-outline-primary" href="/restaurants/{{this.id}}/edit" role="button">Edit</a>
+              <a class="btn btn-outline-success" href="/restaurants/{{this.id}}" role="button">Detail</a>
               <form action="/restaurants/{{this.id}}?_method=DELETE" method="POST">
-                <button type="submit" class="btn btn-outline-danger m-1">Delete</button>
+                <button type="submit" class="btn btn-outline-danger">Delete</button>
               </form>
             </div>
 

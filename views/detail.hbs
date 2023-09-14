@@ -1,5 +1,6 @@
 <!-- restaurant detail -->
 <h1 class="mb-1 restaurant-show-title">{{restaurant.name}}</h1>
+{{> message}}
 <div class="container">
   <div class="row">
     <div class="col-12 col-md-10 mx-auto">
@@ -37,7 +38,7 @@
 
       <img class="rounded mx-auto d-block mb-4 w-100" src="{{restaurant.image}}" alt="{{restaurant.name}}"
         style="max-width: 600px;">
-        
+
       <div class="text-center">
         <a href="/restaurants" class="btn btn-primary mb-4" role="button">Back</a>
       </div>

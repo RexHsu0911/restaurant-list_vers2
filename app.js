@@ -3,6 +3,18 @@ const app = express()
 const { engine } = require('express-handlebars')
 const bodyParser = require('body-parser')
 const methodOverride = require('method-override')
+const flash = require('connect-flash')
+const session = require('express-session')
+const messageHandler = require('./middlewares/message-handler')
+const errorHandler = require('./middlewares/error-handler')
+
+if (process.env.NODE_ENV === 'development') {
+  require('dotenv').config()
+}
+// console.log('SESSION_SECRET:', process.env.SESSION_SECRET)
+
+// 引用路由器
+const router = require('./routes')
 const port = 3000
 
 const db = require('./models')
@@ -13,98 +25,24 @@ app.set('view engine', '.hbs')
 app.set('views', './views')
 app.use(express.static('public'))
 // 使用 body-parser 中間件來解析 URL 編碼的表單資料
-app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.urlencoded({ extended: true }))
 // 支援 json
 app.use(bodyParser.json())
 app.use(methodOverride('_method'))
 
-app.get('/', (req, res) => {
-  res.redirect('/restaurants')
-})
 
-// 顯示 restaurant 清單頁
-app.get('/restaurants', (req, res) => {
-  return Restaurant.findAll({
-    raw: true
-  })
-    .then((restaurants) => res.render('index', { restaurants }))
-    .catch((err) => res.status(422).json(err))
-})
+app.use(session({
+  secret: process.env.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: false
+}))
+app.use(flash())
 
-// 搜尋 restaurant
-app.get('/search', (req, res) => {
-  const keywords = req.query.keyword?.trim()
-  // console.log('keywords:', keywords)
-  if (!keywords) {
-    return res.redirect('/restaurants')
-  }
+app.use(messageHandler)
+app.use(router)
+app.use(errorHandler)
 
-  Restaurant.findAll({
-    raw: true
-  })
-    .then((restaurants) => {
-      const filterRestaurant = restaurants.filter(restaurant => {
-        return restaurant.name.toLowerCase().includes(keywords.toLowerCase()) || restaurant.name_en.toLowerCase().includes(keywords.toLowerCase()) || restaurant.category.toLowerCase().includes(keywords.toLowerCase()) || restaurant.location.toLowerCase().includes(keywords.toLowerCase())
-      })
-      // console.log(filterRestaurant)
-      res.render('index', { restaurants: filterRestaurant, keywords })
-    })
-})
 
-// 新增 restaurant 頁
-app.get('/restaurants/new', (req, res) => {
-  return res.render('new')
-})
-
-// 新增 restaurant
-app.post('/restaurants', (req, res) => {
-  // 從 req.body 中獲取表單資料
-  const formData = req.body
-  // res.json(req.body)
-  return Restaurant.create(formData)
-    .then(() => {
-      res.redirect('/restaurants')
-    })
-    .catch((err) => console.log(err))
-})
-
-// 顯示 restaurant 項目頁
-app.get('/restaurants/:id', (req, res) => {
-  const id = req.params.id
-  // console.log('id:', req.params)
-  return Restaurant.findByPk(id, {
-    raw: true
-  })
-    .then((restaurant) => res.render('detail', { restaurant }))
-    .catch((err) => console.log(err))
-})
-
-// 更新 restaurant 頁
-app.get('/restaurants/:id/edit', (req, res) => {
-  const id =req.params.id
-  return Restaurant.findByPk(id, {
-    raw: true
-  })
-    .then((restaurant) => res.render('edit', { restaurant }))
-    .catch((err) => console.log(err))
-})
-
-// 更新 restaurant
-app.put('/restaurants/:id', (req, res) => {
-  const formData = req.body
-  const id = req.params.id
-  return Restaurant.update(formData, { where: { id } })
-    .then(() => res.redirect(`/restaurants/${id}`))
-    .catch((err) => console.log(err))
-  })
-
-// 刪除 restaurant 
-app.delete('/restaurants/:id', (req, res) => {
-  const id = req.params.id
-  return Restaurant.destroy({ where: { id } })
-    .then(() => res.redirect('/restaurants'))
-    .catch((err) => console.log(err))
-})
 
 app.listen(port, () => {
   console.log(`app is running on http://localhost:${port}`)
