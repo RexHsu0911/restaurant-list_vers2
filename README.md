@@ -1,15 +1,12 @@
 # restaurant-list_vers2
-![螢幕擷取畫面 2023-09-11 221056](https://github.com/RexHsu0911/restaurant-list_vers2/assets/141574303/7d18df1c-665f-4730-939b-5ede6b68021e)
-
-
-
-
+![螢幕擷取畫面 2023-09-15 172834](https://github.com/RexHsu0911/restaurant-list_vers2/assets/141574303/3e30e3bf-8aa6-4c69-a78a-36838245a22a)
 ## 功能
 - 搜尋餐廳
 - 新增餐廳
 - 修改餐廳資訊
 - 查看餐廳詳細資訊
 - 刪除餐廳
+- 排序餐廳
 
 
 ## 開始使用
