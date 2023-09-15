@@ -133,7 +133,9 @@ router.get('/restaurants/:id/edit', (req, res, next) => {
   return Restaurant.findByPk(id, {
     raw: true
   })
-    .then((restaurant) => res.render('edit', { restaurant }))
+    .then((restaurant) => {
+      res.render('edit', { restaurant })
+    })
     .catch((error) => {
       error.errorMessage = '資料取得失敗:('
       next(error)
