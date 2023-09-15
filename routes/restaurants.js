@@ -10,17 +10,17 @@ router.get('/restaurants', (req, res, next) => {
   const limit = 9
 
   return Restaurant.findAll({
-    atrributes: [ 'name', 'category', 'image', 'rating'],
-    offset: (page - 1) * limit,
-    limit,
+    // order: sortCase,
     raw: true
-
   })
     .then((restaurants) => {
+      const totalPages = Math.ceil((restaurants.map(item => item.name).length) / limit)
+      // console.log(totalPages)
       res.render('index', {
-        restaurants,
+        restaurants: restaurants.slice((page - 1) * limit, page * limit),
+        // order,
         prev: page > 1 ? page - 1 : page,
-        next: page + 1,
+        next: totalPages > page ? page + 1 : page,
         page
       })
     })
@@ -43,10 +43,48 @@ router.get('/search', (req, res, next) => {
   })
     .then((restaurants) => {
       const filterRestaurant = restaurants.filter(restaurant => {
-        return restaurant.name.toLowerCase().includes(keywords.toLowerCase()) || restaurant.name_en.toLowerCase().includes(keywords.toLowerCase()) || restaurant.category.toLowerCase().includes(keywords.toLowerCase()) || restaurant.location.toLowerCase().includes(keywords.toLowerCase())
+        return restaurant.name.toLowerCase().includes(keywords.toLowerCase()) || restaurant.name_en.toLowerCase().includes(keywords.toLowerCase()) || restaurant.category.includes(keywords)
       })
       // console.log(filterRestaurant)
       res.render('index', { restaurants: filterRestaurant, keywords })
+    })
+    .catch((error) => {
+      error.errorMessage = '資料取得失敗:('
+      next(error)
+    })
+})
+
+router.get('/sort', (req, res, next) => {
+  const sort = req.query.sort
+  console.log(sort)
+  if (!sort) {
+    return res.redirect('/restaurants')
+  }
+
+  const sortCase = function sortCase(sort) {
+    switch (sort) {
+      case 'A':
+        return [['name_en', 'ASC']];
+      case 'Z':
+        return [['name_en', 'DESC']];
+      case '類別':
+        return [['category']];
+      case '地區':
+        return [['location']];
+      default:
+        return [[]];
+    }
+  }
+
+  return Restaurant.findAll({
+    order: sortCase,
+    raw: true
+  })
+    .then((restaurants) => {
+      res.render('index', {
+        restaurants,
+        // order,
+      })
     })
     .catch((error) => {
       error.errorMessage = '資料取得失敗:('

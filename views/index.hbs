@@ -13,15 +13,17 @@
             </div>
           </div>
 
-          <div class="input-group col">
-            <select class="form-select" name="sort" id="sort">
-              <option selected value="">Sort</option>
-              <option value="A">A->Z</option>
-              <option value="Z">Z->A</option>
-              <option value="類別">類別</option>
-              <option value="地區">地區</option>
-            </select>
-          </div>
+          <form action="/sort" method="GET">
+            <div class="col">
+              <select class="form-select" name="sort">
+                <option value="">Sort</option>
+                <option value="A">A->Z</option>
+                <option value="Z">Z->A</option>
+                <option value="類別">類別</option>
+                <option value="地區">地區</option>
+              </select>
+            </div>
+          </form>
         </div>
     </div>
     </form>
