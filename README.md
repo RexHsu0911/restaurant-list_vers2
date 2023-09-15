@@ -1,4 +1,8 @@
 # restaurant-list_vers2
+![螢幕擷取畫面 2023-09-11 221056](https://github.com/RexHsu0911/restaurant-list_vers2/assets/141574303/7d18df1c-665f-4730-939b-5ede6b68021e)
+
+
+
 
 ## 功能
 - 搜尋餐廳
