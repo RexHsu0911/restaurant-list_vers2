@@ -75,9 +75,14 @@
           <button class="page-link" type="submit">&laquo;</button>
         </form>
       </li>
+      {{#each eachPages}}
       <li class="page-item">
-        <span class="page-link">{{page}}</span>
+        <form action="/restaurants" method="GET">
+          <input type="hidden" name="page" value="{{this}}">
+          <button class="page-link" type="submit">{{this}}</button>
+        </form>
       </li>
+      {{/each}}
       <li class="page-item">
         <form action="/restaurants" method="GET" style="display: inline;">
           <input type="hidden" name="page" value="{{next}}">

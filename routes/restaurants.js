@@ -9,19 +9,24 @@ router.get('/restaurants', (req, res, next) => {
   const page = parseInt(req.query.page) || 1
   const limit = 9
 
-  return Restaurant.findAll({
+  return Restaurant.findAndCountAll({
+    offset: (page - 1) * limit,
+    limit,
     // order: sortCase,
     raw: true
   })
     .then((restaurants) => {
-      const totalPages = Math.ceil((restaurants.map(item => item.name).length) / limit)
-      // console.log(totalPages)
+      const totalPages = Math.ceil(restaurants.count / limit)
+      const eachPages = Array.from({ length: totalPages }).map((item, index) => index + 1)
+      // console.log(restaurants)
+      
       res.render('index', {
-        restaurants: restaurants.slice((page - 1) * limit, page * limit),
         // order,
+        restaurants: restaurants.rows,
         prev: page > 1 ? page - 1 : page,
-        next: totalPages > page ? page + 1 : page,
-        page
+        next: totalPages > page ? page + 1 : totalPages,
+        page,
+        eachPages
       })
     })
     .catch((error) => {
@@ -61,18 +66,18 @@ router.get('/sort', (req, res, next) => {
     return res.redirect('/restaurants')
   }
 
-  const sortCase = function sortCase(sort) {
+  const sortCase = function sortCase (sort) {
     switch (sort) {
       case 'A':
-        return [['name_en', 'ASC']];
+        return [['name_en', 'ASC']]
       case 'Z':
-        return [['name_en', 'DESC']];
+        return [['name_en', 'DESC']]
       case '類別':
-        return [['category']];
+        return [['category']]
       case '地區':
-        return [['location']];
+        return [['location']]
       default:
-        return [[]];
+        return [[]]
     }
   }
 
@@ -82,7 +87,7 @@ router.get('/sort', (req, res, next) => {
   })
     .then((restaurants) => {
       res.render('index', {
-        restaurants,
+        restaurants
         // order,
       })
     })
