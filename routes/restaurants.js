@@ -1,5 +1,6 @@
 const express = require('express')
 const router = express.Router()
+const Handlebars = require("handlebars")
 
 const db = require('../models')
 const Restaurant = db.Restaurant
@@ -17,9 +18,10 @@ router.get('/restaurants', (req, res, next) => {
   })
     .then((restaurants) => {
       const totalPages = Math.ceil(restaurants.count / limit)
+      // Array.from()可以利用箭頭函數產生一組陣列，第一個參數傳入一個object (totalPages)，內容包含長度length，第二個參數利用箭頭函數表示執行 map 函數來產生陣列
       const eachPages = Array.from({ length: totalPages }).map((item, index) => index + 1)
       // console.log(restaurants)
-      
+
       res.render('index', {
         // order,
         restaurants: restaurants.rows,
@@ -66,7 +68,7 @@ router.get('/sort', (req, res, next) => {
     return res.redirect('/restaurants')
   }
 
-  const sortCase = function sortCase (sort) {
+  const sortCase = function sortCase(sort) {
     switch (sort) {
       case 'A':
         return [['name_en', 'ASC']]
@@ -99,7 +101,14 @@ router.get('/sort', (req, res, next) => {
 
 // 新增 restaurant 頁
 router.get('/restaurants/new', (req, res, next) => {
-  return res.render('new')
+  return Restaurant.findAll({
+    raw: true
+  })
+    .then((restaurant) => res.render('new', { restaurant }))
+    .catch((error) => {
+      error.errorMessage = '資料取得失敗:('
+      next(error)
+    })
 })
 
 // 新增 restaurant
@@ -139,7 +148,14 @@ router.get('/restaurants/:id/edit', (req, res, next) => {
     raw: true
   })
     .then((restaurant) => {
-      res.render('edit', { restaurant })
+      const category = restaurant.category
+      // Handlebars.registerHelper 是 Handlebars.js 模板引擎中的一個方法
+      // 用於註冊自定義的 Handlebars 輔助函數（helper functions）
+      Handlebars.registerHelper("isSelected", function (value) {
+        console.log(value)
+        return value === category
+      })
+      return res.render('edit', { restaurant })
     })
     .catch((error) => {
       error.errorMessage = '資料取得失敗:('
