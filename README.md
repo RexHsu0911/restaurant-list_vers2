@@ -10,32 +10,59 @@
 
 
 ## 開始使用
+1. 打開終端機
+2. 將專案複製到本地：
 
-1. 請先確認有安裝 node.js 與 npm
-2. 將專案 clone 到本地:
+   ```bash
+   git clone https://github.com/RexHsu0911/restaurant-list_vers2.git
+   ```
+   
+3. 進入專案資料夾：
+
+   ```bash
+   cd restaurant-list_vers2
+   ```
+
+4. 安裝npm：
 
    ```bash
    npm install
    ```
-4. 在本地開啟之後，透過終端機進入資料夾，輸入：
 
+5. 啟動環境變數設置：
+   
+   windows powerShell
    ```bash
-   npm install
+   set NODE_ENV=development
+   ```
+   Windows command line
+   ```bash
+   $env:NODE_ENV="development"
+   ```
+   Mac terminal
+   ```bash
+   export NODE_ENV=development
    ```
 
-5. 安裝完畢後，繼續輸入：
+6. 新增.env檔，並設置環境參數：
+   
+    ```bash
+   SESSION_SECRET: 自行設定
+   ```
+
+7. 啟動專案：
 
    ```bash
    npm run start
    ```
-
-6. 若看見此行訊息則代表順利運行，打開瀏覽器進入到以下網址
+   
+8. 若看見此行訊息則代表順利運行，打開瀏覽器進入到以下網址
 
    ```bash
    app is running on http://localhost:3000
    ```
 
-7. 若欲暫停使用
+9. 欲結束使用：
 
    ```bash
    ctrl + c
