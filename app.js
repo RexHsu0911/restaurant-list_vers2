@@ -17,12 +17,17 @@ if (process.env.NODE_ENV === 'development') {
 const router = require('./routes')
 const port = 3000
 
-app.engine('.hbs', engine({ extname: '.hbs' }))
+app.engine('.hbs', engine({ 
+  extname: '.hbs',
+}))
 app.set('view engine', '.hbs')
 app.set('views', './views')
 app.use(express.static('public'))
 // 使用 body-parser 中間件來解析 URL 編碼的表單資料
-app.use(bodyParser.urlencoded({ extended: true }))
+app.use(bodyParser.urlencoded({ 
+  extended: true,
+  helpers: require('./routes/restaurants')
+}))
 // 支援 json
 app.use(bodyParser.json())
 app.use(methodOverride('_method'))

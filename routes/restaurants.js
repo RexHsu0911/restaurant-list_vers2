@@ -1,11 +1,11 @@
 const express = require('express')
 const router = express.Router()
-const Handlebars = require("handlebars")
+const Handlebars = require('handlebars')
 
 const db = require('../models')
 const Restaurant = db.Restaurant
 
-// 顯示 restaurant 清單頁
+// 顯示 restaurant 清單頁(分頁)
 router.get('/restaurants', (req, res, next) => {
   const page = parseInt(req.query.page) || 1
   const limit = 9
@@ -37,8 +37,8 @@ router.get('/restaurants', (req, res, next) => {
     })
 })
 
-// 搜尋 restaurant
-router.get('/search', (req, res, next) => {
+// 顯示 restaurant 清單頁(搜尋)
+router.get('/restaurants/search', (req, res, next) => {
   const keywords = req.query.keyword?.trim()
   // console.log('keywords:', keywords)
   if (!keywords) {
@@ -61,12 +61,9 @@ router.get('/search', (req, res, next) => {
     })
 })
 
-router.get('/sort', (req, res, next) => {
-  const sort = req.query.sort
-  console.log(sort)
-  if (!sort) {
-    return res.redirect('/restaurants')
-  }
+// 顯示 restaurant 清單頁(分類)
+router.get('/restaurants', (req, res, next) => {
+  const sort = req.query.sort || 'A'
 
   const sortCase = function sortCase(sort) {
     switch (sort) {
@@ -82,16 +79,27 @@ router.get('/sort', (req, res, next) => {
         return [[]]
     }
   }
+  // console.log(sort)
+  // console.log(sortCase(sort))
 
   return Restaurant.findAll({
-    order: sortCase,
+    order: sortCase(sort),
     raw: true
   })
     .then((restaurants) => {
-      res.render('index', {
-        restaurants
-        // order,
-      })
+      // Handlebars.registerHelper('selectedOrder', function (value, selectedValue) {
+      //   console.log(value)
+      // })
+      // const selectedOrder = function (value) {
+      //   // console.log(value)
+      //   return value === sort
+      // }
+
+      const selectedOrder = function (value, selectedValue) {
+        console.log(value)
+        return selectedValue === value ? 'selected' : ''
+      }
+      res.render('index', { restaurants, selectedOrder })
     })
     .catch((error) => {
       error.errorMessage = '資料取得失敗:('
@@ -151,11 +159,11 @@ router.get('/restaurants/:id/edit', (req, res, next) => {
       const category = restaurant.category
       // Handlebars.registerHelper 是 Handlebars.js 模板引擎中的一個方法
       // 用於註冊自定義的 Handlebars 輔助函數（helper functions）
-      Handlebars.registerHelper("isSelected", function (value) {
-        console.log(value)
+      const selectedCategory = function (value) {
+        // console.log(value)
         return value === category
-      })
-      return res.render('edit', { restaurant })
+      }
+      return res.render('edit', { restaurant, selectedCategory })
     })
     .catch((error) => {
       error.errorMessage = '資料取得失敗:('

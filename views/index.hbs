@@ -2,7 +2,7 @@
 <div class="container search-bar">
   <div class="search-bar-outer">
     <div class="search-bar-inner">
-      <form action="/search">
+      <form action="/restaurants/search">
         <h4 class="mb-2">尋找餐廳：</h4>
         <div class="row g-5">
           <div class="input-group col">
@@ -13,14 +13,13 @@
             </div>
           </div>
 
-          <form action="/sort" method="GET">
+          <form action="/restaurants" method="GET" id="sort-form">
             <div class="col">
-              <select class="form-select" name="sort">
-                <option value="">Sort</option>
-                <option value="A">A->Z</option>
-                <option value="Z">Z->A</option>
-                <option value="類別">類別</option>
-                <option value="地區">地區</option>
+              <select class="form-select" name="sort" onchange="submitForm()">
+                <option {{selectedOrder 'A' sort}} value="A">A -> Z</option>
+                <option {{selectedOrder 'Z' sort}} value="Z">Z -> A</option>
+                <option {{selectedOrder '類別' sort}} value="類別">類別</option>
+                <option {{selectedOrder '地區' sort}} value="地區">地區</option>
               </select>
             </div>
           </form>
