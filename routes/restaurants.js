@@ -1,6 +1,5 @@
 const express = require('express')
 const router = express.Router()
-const Handlebars = require('handlebars')
 
 const db = require('../models')
 const Restaurant = db.Restaurant
@@ -87,14 +86,6 @@ router.get('/restaurants', (req, res, next) => {
     raw: true
   })
     .then((restaurants) => {
-      // Handlebars.registerHelper('selectedOrder', function (value, selectedValue) {
-      //   console.log(value)
-      // })
-      // const selectedOrder = function (value) {
-      //   // console.log(value)
-      //   return value === sort
-      // }
-
       const selectedOrder = function (value, selectedValue) {
         console.log(value)
         return selectedValue === value ? 'selected' : ''
