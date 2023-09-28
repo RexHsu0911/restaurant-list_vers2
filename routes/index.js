@@ -9,6 +9,7 @@ const db = require('../models')
 const User = db.User
 
 
+// 設定本地驗證策略 LocalStrategy
 // usernameField 指定使用者名稱的欄位
 passport.use(new LocalStrategy({ usernameField: 'email' }, (username, password, done) => {
   return User.findOne({
@@ -29,18 +30,25 @@ passport.use(new LocalStrategy({ usernameField: 'email' }, (username, password, 
     })
 }))
 
-// 當驗證成功後，它會將 user 物件中的重要屬性 id、name 和 email序列化後傳遞給 done 函式(要存什麼資料到 session)
+// 當驗證成功後，它會將 user 物件中的重要屬性 id、name 和 email 序列化後傳遞給 done 函式(serialize 要存什麼資料到 session)
 passport.serializeUser((user, done) => {
   const { id, name, email } = user
   return done(null, { id, name, email })
 })
 
+// 接收到的 user 物件中應該包含使用者的 id 屬性，反序列化後將該屬性提取出來，使用 done 回呼函式將提取的 id 值傳遞回去(只提供 user.id)(deserialize 將儲存的格式轉換回原始的使用者物件)
+passport.deserializeUser((user, done) => {
+  done(null, { id: user.id })
+})
+
 
 const restaurants = require('./restaurants')
 const users = require('./users')
+const authHandler = require('../middlewares/auth-handler')
 // router.use 方法來設置路由分流
 // 當收到以 /restaurants 開頭的請求時，則分流到 restaurants.js
-router.use('/restaurants', restaurants)
+// 在需要受保護的路由處理程序中使用驗證檢查站 authHandler
+router.use('/restaurants', authHandler, restaurants)
 router.use('/users', users)
 
 
@@ -69,8 +77,14 @@ router.post('/login', passport.authenticate('local', {
 }))
 
 //登出
-router.post('/logout', (req, res) => {
-  return res.send('logout')
+router.post('/logout', (req, res, next) => {
+  req.logout((error) => {
+    if (error) {
+      return next(error)
+    }
+
+    return res.redirect('/login')
+  })
 })
 
 module.exports = router

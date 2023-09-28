@@ -40,7 +40,10 @@ app.use(session({
 }))
 app.use(flash())
 
+// 實做登入流程
 app.use(passport.initialize())
+// 使用 session 作為驗證的資料來源，登入後保持登入狀態
+app.use(passport.session())
 
 app.use(messageHandler)
 app.use(router)
