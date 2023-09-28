@@ -2,6 +2,40 @@
 const express = require('express')
 const router = express.Router()
 
+const passport = require('passport')
+const LocalStrategy = require('passport-local')
+
+const db = require('../models')
+const User = db.User
+
+
+// usernameField 指定使用者名稱的欄位
+passport.use(new LocalStrategy({ usernameField: 'email' }, (username, password, done) => {
+  return User.findOne({
+    attributes: ['id', 'name', 'email', 'password'],
+    where: { email: username },
+    raw: true
+  })
+    .then((user) => {
+      // 驗證帳密是否正確
+      if (!user || user.password !== password) {
+        return done(null, false, { message: 'email 或密碼錯誤' })
+      }
+      return done(null, user)
+    })
+    .catch((error) => {
+      error.errorMessage = '登入失敗'
+      done(error)
+    })
+}))
+
+// 當驗證成功後，它會將 user 物件中的重要屬性 id、name 和 email序列化後傳遞給 done 函式(要存什麼資料到 session)
+passport.serializeUser((user, done) => {
+  const { id, name, email } = user
+  return done(null, { id, name, email })
+})
+
+
 const restaurants = require('./restaurants')
 const users = require('./users')
 // router.use 方法來設置路由分流
@@ -26,9 +60,13 @@ router.get('/login', (req, res) => {
 })
 
 // 登入
-router.post('/login', (req, res) => {
-  return res.send('req.body')
-})
+// 使用 passport.authenticate 驗證登入請求
+router.post('/login', passport.authenticate('local', {
+  successRedirect: '/restaurants',
+  failureRedirect: '/login',
+  // 登入失敗時有錯誤訊息顯示
+  failureFlash: true
+}))
 
 //登出
 router.post('/logout', (req, res) => {
