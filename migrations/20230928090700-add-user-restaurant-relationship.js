@@ -21,3 +21,6 @@ module.exports = {
     await queryInterface.removeColumn('Restaurants', 'userId')
   }
 };
+
+
+// 在 MySQL Workbench 對現有的 restaurants 指定 userId (可自行選擇 user table 中的 id)，這裡使用 update 來達成：UPDATE Todos SET userID = 1;
