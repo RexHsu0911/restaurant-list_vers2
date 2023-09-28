@@ -10,6 +10,7 @@ router.use('/restaurants', restaurants)
 router.use('/users', users)
 
 
+// 顯示 restaurant 清單頁
 router.get('/', (req, res) => {
   res.redirect('/restaurants')
 })
