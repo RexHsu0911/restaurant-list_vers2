@@ -1,0 +1,30 @@
+<div class="banner"></div>
+
+<h1 class="mb-1 restaurant-show-title text-center">Login</h1>
+{{> message}}
+<div class="container">
+  <div class="login">
+    <form class="col-md-5" action="/login" method="POST">
+      
+      <div class="row pb-3">
+        <label for="email" class="px-0">Email</label>
+        <input type="email" class="form-control" name="email" placeholder="Enter email" required>
+      </div>
+
+      <div class="row pb-3">
+        <label for="password" class="px-0">Password</label>
+        <input type="password" class="form-control" name="password" placeholder="Enter password" required>
+      </div>
+
+      <div class="row justify-content-center py-4">
+        <button class="btn btn-primary col-auto text-center px-2" type="submit">Login</button>
+      </div>
+
+    </form>
+  </div>
+</div>
+
+<div class="mx-auto text-center">
+  <span class="text-secondary">No account?</span>
+  <a href="/register">Register</a>
+</div>

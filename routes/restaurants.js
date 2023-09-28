@@ -5,7 +5,7 @@ const db = require('../models')
 const Restaurant = db.Restaurant
 
 // 顯示 restaurant 清單頁(分頁)
-router.get('/restaurants', (req, res, next) => {
+router.get('/', (req, res, next) => {
   const page = parseInt(req.query.page) || 1
   const limit = 9
 
@@ -37,7 +37,7 @@ router.get('/restaurants', (req, res, next) => {
 })
 
 // 顯示 restaurant 清單頁(搜尋)
-router.get('/restaurants/search', (req, res, next) => {
+router.get('/search', (req, res, next) => {
   const keywords = req.query.keyword?.trim()
   // console.log('keywords:', keywords)
   if (!keywords) {
@@ -61,10 +61,10 @@ router.get('/restaurants/search', (req, res, next) => {
 })
 
 // 顯示 restaurant 清單頁(分類)
-router.get('/restaurants', (req, res, next) => {
+router.get('/', (req, res, next) => {
   const sort = req.query.sort || 'A'
 
-  const sortCase = function sortCase(sort) {
+  const sortCase = function sortCase (sort) {
     switch (sort) {
       case 'A':
         return [['name_en', 'ASC']]
@@ -99,7 +99,7 @@ router.get('/restaurants', (req, res, next) => {
 })
 
 // 新增 restaurant 頁
-router.get('/restaurants/new', (req, res, next) => {
+router.get('/new', (req, res, next) => {
   return Restaurant.findAll({
     raw: true
   })
@@ -111,7 +111,7 @@ router.get('/restaurants/new', (req, res, next) => {
 })
 
 // 新增 restaurant
-router.post('/restaurants', (req, res, next) => {
+router.post('/', (req, res, next) => {
   // 從 req.body 中獲取表單資料
   const formData = req.body
   // res.json(req.body)
@@ -127,7 +127,7 @@ router.post('/restaurants', (req, res, next) => {
 })
 
 // 顯示 restaurant 項目頁
-router.get('/restaurants/:id', (req, res, next) => {
+router.get('/:id', (req, res, next) => {
   const id = req.params.id
   // console.log('id:', req.params)
   return Restaurant.findByPk(id, {
@@ -141,7 +141,7 @@ router.get('/restaurants/:id', (req, res, next) => {
 })
 
 // 更新 restaurant 頁
-router.get('/restaurants/:id/edit', (req, res, next) => {
+router.get('/:id/edit', (req, res, next) => {
   const id = req.params.id
   return Restaurant.findByPk(id, {
     raw: true
@@ -163,7 +163,7 @@ router.get('/restaurants/:id/edit', (req, res, next) => {
 })
 
 // 更新 restaurant
-router.put('/restaurants/:id', (req, res, next) => {
+router.put('/:id', (req, res, next) => {
   const formData = req.body
   const id = req.params.id
   return Restaurant.update(formData, { where: { id } })
@@ -178,7 +178,7 @@ router.put('/restaurants/:id', (req, res, next) => {
 })
 
 // 刪除 restaurant
-router.delete('/restaurants/:id', (req, res, next) => {
+router.delete('/:id', (req, res, next) => {
   const id = req.params.id
   return Restaurant.destroy({ where: { id } })
     .then(() => {

@@ -10,6 +10,16 @@ header {
   color: #226089;
 }
 
+.container .create {
+  padding-right: 4rem;
+}
+
+.navbar .logout {
+  position: absolute;
+  right: 0;
+  padding: 1rem;
+}
+
 .banner {
   position: relative;
   z-index: -1;
@@ -116,4 +126,14 @@ header {
     height: auto;
   }
 
+}
+
+.container .login {
+  display: flex;
+  justify-content: center;
+}
+
+.container .register {
+  display: flex;
+  justify-content: center;
 }

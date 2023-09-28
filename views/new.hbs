@@ -1,3 +1,24 @@
+<header>
+  <!-- navigation -->
+  <nav class="navbar navbar-light bg-light">
+    <div class="logout">
+      {{>navbar}}
+    </div>
+
+    <div class="container">
+      <a class="navbar-brand" href="/">
+        <img src="https://assets-lighthouse.s3.amazonaws.com/uploads/image/file/6227/restaurant-list-logo.png"
+          width="30" height="30" class="d-inline-block align-top" alt="我的餐廳清單">
+        我的餐廳清單
+      </a>
+      <div class="create col text-end">
+        <a class="btn btn-warning" href="/restaurants/new" role="button">Create</a>
+      </div>
+    </div>
+  </nav>
+  <div class="banner"></div>
+
+</header>
 <!-- restaurant create -->
 <h1 class="mb-1 restaurant-show-title text-center">Create restaurant</h1>
 {{> message}}
