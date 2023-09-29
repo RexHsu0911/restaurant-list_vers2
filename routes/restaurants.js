@@ -144,6 +144,7 @@ router.post('/', (req, res, next) => {
 // 顯示 restaurant 項目頁
 router.get('/:id', (req, res, next) => {
   const id = req.params.id
+  const userId = req.user.id
   // console.log('id:', req.params)
 
   return Restaurant.findByPk(id, {
@@ -171,6 +172,7 @@ router.get('/:id', (req, res, next) => {
 // 更新 restaurant 頁
 router.get('/:id/edit', (req, res, next) => {
   const id = req.params.id
+  const userId = req.user.id
 
   return Restaurant.findByPk(id, {
     raw: true

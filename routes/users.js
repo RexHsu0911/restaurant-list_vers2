@@ -1,6 +1,8 @@
 const express = require('express')
 const router = express.Router()
 
+const bcrypt = require('bcryptjs')
+
 const db = require('../models')
 const User = db.User
 
@@ -28,7 +30,10 @@ router.post('/', (req, res, next) => {
         return
       }
 
-      return User.create({ name, email, password })
+      // 註冊的加鹽及雜湊
+      // bcrypt.hash 放入密碼明文及指定加鹽字串長度
+      return bcrypt.hash(password, 10)
+        .then((hash) => User.create({ name, email, password: hash }))
     })
     .then((user) => {
       if (!user) {
