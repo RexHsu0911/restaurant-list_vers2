@@ -5,7 +5,7 @@
 <div class="container">
   <div class="register">
     <form class="col-md-5" action="/users" method="POST">
-    
+
       <div class="row pb-3">
         <label for="name" class="px-0">Name</label>
         <input type="text" class="form-control" name="name" placeholder="Enter name">
@@ -23,8 +23,7 @@
 
       <div class="row">
         <label for="confirmPassword" class="px-0">Confirm password</label>
-        <input type="password" class="form-control" name="confirmPassword" placeholder="Confirm password"
-          required>
+        <input type="password" class="form-control" name="confirmPassword" placeholder="Confirm password" required>
       </div>
 
       <div class="row justify-content-center py-4">
@@ -36,6 +35,16 @@
 </div>
 
 <div class="mx-auto text-center">
-    <span class="text-secondary">Already have an account?</span>
-    <a href="/login">Login</a>
+  <span class="text-secondary">Already have an account?</span>
+  <a href="/login">Login</a>
+</div>
+
+<div class="mx-auto text-center py-4">
+  <span class="text-secondary">-or-</span>
+</div>
+
+<div class="row justify-content-center pb-4 text-center">
+  <form class="facebook col-md-5" action="/login/facebook" method="GET">
+    <button class="btn btn-primary" type="submit">Facebook Login</button>
+  </form>
 </div>

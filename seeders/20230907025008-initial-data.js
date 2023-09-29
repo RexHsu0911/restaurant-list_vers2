@@ -7,7 +7,7 @@ const bcrypt = require('bcryptjs')
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  async up(queryInterface, Sequelize) {
+  async up (queryInterface, Sequelize) {
     // 實作 Users 與 Restaurants 關聯的資料
     let transaction
 
@@ -76,12 +76,12 @@ module.exports = {
       // 操作成功則提交 commit()，否則取消 rollback() 以還原資料庫狀態
       await transaction.commit()
     } catch (error) {
-      console.error("Error occurred:", error)
+      console.error('Error occurred:', error)
       if (transaction) await transaction.rollback()
     }
   },
 
-  async down(queryInterface, Sequelize) {
+  async down (queryInterface, Sequelize) {
     await queryInterface.bulkDelete('Users', null)
   }
 }

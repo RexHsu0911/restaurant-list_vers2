@@ -5,10 +5,10 @@ const router = express.Router()
 const passport = require('passport')
 const LocalStrategy = require('passport-local')
 const bcrypt = require('bcryptjs')
+const FacebookStrategy = require('passport-facebook')
 
 const db = require('../models')
 const User = db.User
-
 
 // 設定本地驗證策略 LocalStrategy
 // usernameField 指定使用者名稱的欄位
@@ -40,6 +40,17 @@ passport.use(new LocalStrategy({ usernameField: 'email' }, (username, password, 
     })
 }))
 
+passport.use(new FacebookStrategy({
+  clientID: process.env.FACEBOOK_CLIENT_ID,
+  clientSecret: process.env.FACEBOOK_CLIENT_SECRET,
+  callbackURL: process.env.FACEBOOK_CALLBACK_URL,
+}, (accessToken, refreshToken, profile, done) => {
+  console.log('accessToken', accessToken)
+  console.log('profile', profile)
+
+  done(null, {})
+}))
+
 // 當驗證成功後，它會將 user 物件中的重要屬性 id、name 和 email 序列化後傳遞給 done 函式(serialize 要存什麼資料到 session)
 passport.serializeUser((user, done) => {
   const { id, name, email } = user
@@ -51,7 +62,6 @@ passport.deserializeUser((user, done) => {
   done(null, { id: user.id })
 })
 
-
 const restaurants = require('./restaurants')
 const users = require('./users')
 const authHandler = require('../middlewares/auth-handler')
@@ -60,7 +70,6 @@ const authHandler = require('../middlewares/auth-handler')
 // 在需要受保護的路由處理程序中使用驗證檢查站 authHandler
 router.use('/restaurants', authHandler, restaurants)
 router.use('/users', users)
-
 
 // 顯示 restaurant 清單頁
 router.get('/', (req, res) => {
@@ -86,7 +95,17 @@ router.post('/login', passport.authenticate('local', {
   failureFlash: true
 }))
 
-//登出
+// 登入請求轉址路由
+router.get('/login/facebook', passport.authenticate('facebook', { scope: ['email'] }))
+
+router.get('/oauth2/redirect/facebook', passport.authenticate('facebook', {
+  successRedirect: '/restaurants',
+  failureRedirect: '/login',
+  // 登入失敗時有錯誤訊息顯示
+  failureFlash: true
+}))
+
+// 登出
 router.post('/logout', (req, res, next) => {
   req.logout((error) => {
     if (error) {

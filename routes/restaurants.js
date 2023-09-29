@@ -6,8 +6,8 @@ const Restaurant = db.Restaurant
 
 // 顯示 restaurant 清單頁(分頁)
 router.get('/', (req, res, next) => {
-  // console.log('session:', req.session)
-  // console.log(req.user)
+  console.log('session:', req.session)
+  console.log(req.user)
   const userId = req.user.id
   const page = parseInt(req.query.page) || 1
   const limit = 9
@@ -71,7 +71,7 @@ router.get('/', (req, res, next) => {
   const userId = req.user.id
   const sort = req.query.sort || 'A'
 
-  const sortCase = function sortCase(sort) {
+  const sortCase = function sortCase (sort) {
     switch (sort) {
       case 'A':
         return [['name_en', 'ASC']]

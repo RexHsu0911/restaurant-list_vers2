@@ -6,7 +6,6 @@ const bcrypt = require('bcryptjs')
 const db = require('../models')
 const User = db.User
 
-
 // 新增 user 帳號
 router.post('/', (req, res, next) => {
   const { name, email, password, confirmPassword } = req.body

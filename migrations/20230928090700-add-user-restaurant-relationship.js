@@ -1,8 +1,8 @@
-'use strict';
+'use strict'
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  async up(queryInterface, Sequelize) {
+  async up (queryInterface, Sequelize) {
     // 建立 models 關聯
     await queryInterface.addColumn('Restaurants', 'userId', {
       type: Sequelize.INTEGER,
@@ -17,10 +17,9 @@ module.exports = {
     })
   },
 
-  async down(queryInterface, Sequelize) {
+  async down (queryInterface, Sequelize) {
     await queryInterface.removeColumn('Restaurants', 'userId')
   }
-};
-
+}
 
 // 在 MySQL Workbench 對現有的 restaurants 指定 userId (可自行選擇 user table 中的 id)，這裡使用 update 來達成：UPDATE Todos SET userID = 1;

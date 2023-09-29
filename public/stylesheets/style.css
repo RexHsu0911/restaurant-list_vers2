@@ -137,3 +137,8 @@ header {
   display: flex;
   justify-content: center;
 }
+
+.facebook .btn {
+  background-color: #3c4c92;
+  border-color: #3c4c92;
+}
