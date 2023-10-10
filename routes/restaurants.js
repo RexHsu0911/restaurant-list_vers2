@@ -4,34 +4,56 @@ const router = express.Router()
 const db = require('../models')
 const Restaurant = db.Restaurant
 
-// 顯示 restaurant 清單頁(分頁)
+// 顯示 restaurant 清單頁(分頁、分類)
 router.get('/', (req, res, next) => {
-  console.log('session:', req.session)
+  // console.log('session:', req.session)
   console.log(req.user)
   const userId = req.user.id
   const page = parseInt(req.query.page) || 1
   const limit = 9
+  const sort = req.query.sort || 'A'
+
+  const sortCase = function sortCase(sort) {
+    switch (sort) {
+      case 'A':
+        return [['name_en', 'ASC']]
+      case 'Z':
+        return [['name_en', 'DESC']]
+      case '類別':
+        return [['category']]
+      case '地區':
+        return [['location']]
+      default:
+        return [[]]
+    }
+  }
 
   return Restaurant.findAndCountAll({
     where: { userId },
     offset: (page - 1) * limit,
     limit,
-    // order: sortCase,
+    order: sortCase(sort),
     raw: true
   })
     .then((restaurants) => {
+      const selectedOrder = function (selectedValue) {
+        // console.log(sort)
+        return selectedValue === sort
+      }
+
+      // console.log(restaurants)
       const totalPages = Math.ceil(restaurants.count / limit)
       // Array.from()可以利用箭頭函數產生一組陣列，第一個參數傳入一個object (totalPages)，內容包含長度length，第二個參數利用箭頭函數表示執行 map 函數來產生陣列
       const eachPages = Array.from({ length: totalPages }).map((item, index) => index + 1)
       // console.log(restaurants)
 
       res.render('index', {
-        // order,
+        selectedOrder,
         restaurants: restaurants.rows,
         prev: page > 1 ? page - 1 : page,
         next: totalPages > page ? page + 1 : totalPages,
         page,
-        eachPages
+        eachPages,
       })
     })
     .catch((error) => {
@@ -59,46 +81,6 @@ router.get('/search', (req, res, next) => {
       })
       // console.log(filterRestaurant)
       res.render('index', { restaurants: filterRestaurant, keywords })
-    })
-    .catch((error) => {
-      error.errorMessage = '資料取得失敗:('
-      next(error)
-    })
-})
-
-// 顯示 restaurant 清單頁(分類)
-router.get('/', (req, res, next) => {
-  const userId = req.user.id
-  const sort = req.query.sort || 'A'
-
-  const sortCase = function sortCase (sort) {
-    switch (sort) {
-      case 'A':
-        return [['name_en', 'ASC']]
-      case 'Z':
-        return [['name_en', 'DESC']]
-      case '類別':
-        return [['category']]
-      case '地區':
-        return [['location']]
-      default:
-        return [[]]
-    }
-  }
-  // console.log(sort)
-  // console.log(sortCase(sort))
-
-  return Restaurant.findAll({
-    where: { userId },
-    order: sortCase(sort),
-    raw: true
-  })
-    .then((restaurants) => {
-      const selectedOrder = function (value, selectedValue) {
-        console.log(value)
-        return selectedValue === value ? 'selected' : ''
-      }
-      res.render('index', { restaurants, selectedOrder })
     })
     .catch((error) => {
       error.errorMessage = '資料取得失敗:('

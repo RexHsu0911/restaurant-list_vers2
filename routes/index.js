@@ -1,10 +1,10 @@
 // 引用 Express 與 Express 路由器
 const express = require('express')
 const router = express.Router()
+const bcrypt = require('bcryptjs')
 
 const passport = require('passport')
 const LocalStrategy = require('passport-local')
-const bcrypt = require('bcryptjs')
 const FacebookStrategy = require('passport-facebook')
 
 const db = require('../models')
@@ -44,11 +44,34 @@ passport.use(new FacebookStrategy({
   clientID: process.env.FACEBOOK_CLIENT_ID,
   clientSecret: process.env.FACEBOOK_CLIENT_SECRET,
   callbackURL: process.env.FACEBOOK_CALLBACK_URL,
+  // 設定 profileFields，指定要取得使用者 Facebook 個人資訊的哪些欄位，取得使用者的電子郵件地址 ('email') 和顯示名稱 ('displayName')
+  profileFields: ['email', 'displayName']
 }, (accessToken, refreshToken, profile, done) => {
-  console.log('accessToken', accessToken)
-  console.log('profile', profile)
+  // console.log('accessToken', accessToken)
+  // console.log('profile', profile)
+  const email = profile.emails[0].value
+  const name = profile.displayName
 
-  done(null, {})
+  // 尋找資料庫中是否有符合該電子郵件地址的使用者
+  return User.findOne({
+    attributes: ['id', 'name', 'email'],
+    where: { email },
+    raw: true
+  })
+    .then((user) => {
+      if (user) return done(null, user)
+
+      // 隨機生成密碼(8碼)
+      const randomPwd = Math.random().toString(36).slice(-8)
+
+      return bcrypt.hash(randomPwd, 10)
+        .then((hash) => User.create({ name, email, password: hash }))
+        .then((user) => done(null, { id: user.id, name: user.name, email: user.email }))
+    })
+    .catch((error) => {
+      error.errorMessage = '登入失敗'
+      done(error)
+    })
 }))
 
 // 當驗證成功後，它會將 user 物件中的重要屬性 id、name 和 email 序列化後傳遞給 done 函式(serialize 要存什麼資料到 session)
