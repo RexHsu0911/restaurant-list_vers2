@@ -7,7 +7,7 @@ const Restaurant = db.Restaurant
 // 顯示 restaurant 清單頁(分頁、分類)
 router.get('/', (req, res, next) => {
   // console.log('session:', req.session)
-  console.log(req.user)
+  // console.log(req.user)
   const userId = req.user.id
   const page = parseInt(req.query.page) || 1
   const limit = 9

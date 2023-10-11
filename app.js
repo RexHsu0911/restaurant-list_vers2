@@ -7,7 +7,7 @@ const flash = require('connect-flash')
 const session = require('express-session')
 const messageHandler = require('./middlewares/message-handler')
 const errorHandler = require('./middlewares/error-handler')
-const passport = require('passport')
+
 
 if (process.env.NODE_ENV === 'development') {
   require('dotenv').config()
@@ -16,6 +16,8 @@ if (process.env.NODE_ENV === 'development') {
 
 // 引用路由器
 const router = require('./routes')
+// passport 要引用環境變數，需放在 env 之後
+const passport = require('./config/passport')
 const port = 3000
 
 app.engine('.hbs', engine({ extname: '.hbs' }))
